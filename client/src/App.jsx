@@ -1,33 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import {Routes, Route, Link} from 'react-router-dom'
+import Chat from './components/Chat'
+import Login from './components/Login'
+import Register from './components/Register'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <nav className='nav justify-content-center'>
+      <Link className='nav-link' to='/'>Chat</Link>
+      <Link className='nav-link' to='/login'>Login</Link>
+      <Link className='nav-link' to='/register'>Register</Link>
+    </nav>
+    <main className='container-fluid m-auto my-5 w-50 rounded border p-3' style={{background: "lightgray"}}>
+      <Routes>
+        <Route path='/' element={<Chat />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+      </Routes>
+    </main>
     </>
   )
 }
