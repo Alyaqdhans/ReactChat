@@ -14,8 +14,8 @@ function Register() {
       <label className='form-label' htmlFor="password2">Confirm Password</label>
       <input className='form-control mb-3' type="password" placeholder='Password' id='password2' />
 
-      <div className='text-center'>
-        <input className='btn btn-info me-3' type="submit" value="Login" />
+      <div className='text-center mt-3'>
+        <input className='btn btn-info me-3' type="submit" value="Register" />
         <input className='btn btn-info' type="reset" value="Clear" />
       </div>
     </form>

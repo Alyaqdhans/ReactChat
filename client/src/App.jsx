@@ -8,12 +8,12 @@ function App() {
 
   return (
     <>
-    <nav className='nav justify-content-center'>
+    <nav className='nav justify-content-center bg-warning' style={{fontWeight: 'bold'}}>
       <Link className='nav-link' to='/'>Chat</Link>
       <Link className='nav-link' to='/login'>Login</Link>
       <Link className='nav-link' to='/register'>Register</Link>
     </nav>
-    <main className='container-fluid m-auto my-5 w-50 rounded border p-3' style={{background: "lightgray"}}>
+    <main className='container-fluid m-auto my-5 w-50 rounded border p-3' style={{background: "lightgray", fontWeight: "bold"}}>
       <Routes>
         <Route path='/' element={<Chat />} />
         <Route path='/login' element={<Login />} />
