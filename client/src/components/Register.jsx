@@ -9,14 +9,16 @@ function Register() {
   const [color, setColor] = useState()
 
   const handleRegister = () => {
+    // check if fields are empty
     if (!(user && pass && pass2)) {
-      setResponse("Fill all data before submitting!")
+      setResponse("Some fields are empty!")
       setColor("red")
       return
     }
 
+    // make sure user password is correct
     if (pass !== pass2) {
-      setResponse("Password & confirmation have to be the same!")
+      setResponse("Passwords doesn't match!")
       setColor("red")
       return
     }
@@ -26,7 +28,6 @@ function Register() {
       password: pass
     })
     .then((response) => {
-      console.log(response.data)
       setResponse(response.data)
       setColor("green")
     })
@@ -53,9 +54,15 @@ function Register() {
         <input className='btn btn-info' type="reset" value="Clear" />
       </div>
 
-      <h5 className='text-center rounded' style={{color: color, background: 'white'}}>
-        {response}
-      </h5>
+      {
+        (response) ? (
+          <ul className='rounded m-auto py-1 ps-4 pe-2' style={{color: color, background: 'white', width: 'fit-content'}}>
+            <li><h5>{response}</h5></li>
+          </ul>
+        ) : (
+          <></>
+        )
+      }
     </form>
   )
 }

@@ -23,5 +23,12 @@ app.post(`/registerUser`, async (request, response) => {
   });
   console.log(user);
   await user.save();
-  response.send("Account registred successfully!");
+  response.send("Account registred successfully.");
 });
+
+// logging in express route
+app.get(`/loginUser/:username`, async (request, response) => {
+  const u = request.params.username;
+  const user = await UserModel.find({username: u});
+  response.send({user});
+})

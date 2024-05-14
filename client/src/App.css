@@ -1,3 +1,4 @@
+/* nav style */
 .nav-link {
   position: relative;
 }
@@ -19,4 +20,9 @@
 
 .active::after {
   transform: scaleX(100%);
+}
+
+/* buttons bold font */
+.btn {
+  font-weight: bold !important;
 }
