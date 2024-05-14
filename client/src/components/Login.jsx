@@ -9,7 +9,7 @@ function Login() {
   const handleLogin = () => {
     // check if fields are empty
     if (!(user && pass)) {
-      setResponse("Some fields are empty!")
+      setResponse("Some fields are empty")
       return
     }
 
@@ -39,7 +39,7 @@ function Login() {
 
       {
         (response) ? (
-          <ul className='rounded m-auto py-1 ps-4 pe-2' style={{color: "red", background: 'white', width: 'fit-content'}}>
+          <ul className={'m-auto py-2 px-5 alert alert-danger'} style={{width: 'fit-content'}}>
             <li><h5>{response}</h5></li>
           </ul>
         ) : (

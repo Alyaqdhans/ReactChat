@@ -11,15 +11,15 @@ function Register() {
   const handleRegister = () => {
     // check if fields are empty
     if (!(user && pass && pass2)) {
-      setResponse("Some fields are empty!")
-      setColor("red")
+      setResponse("Some fields are empty")
+      setColor("alert-danger")
       return
     }
 
     // make sure user password is correct
     if (pass !== pass2) {
-      setResponse("Passwords doesn't match!")
-      setColor("red")
+      setResponse("Passwords doesn't match")
+      setColor("alert-danger")
       return
     }
 
@@ -29,7 +29,7 @@ function Register() {
     })
     .then((response) => {
       setResponse(response.data)
-      setColor("green")
+      setColor("alert-success")
     })
     .catch((error) => {
       console.log(error)
@@ -56,7 +56,7 @@ function Register() {
 
       {
         (response) ? (
-          <ul className='rounded m-auto py-1 ps-4 pe-2' style={{color: color, background: 'white', width: 'fit-content'}}>
+          <ul className={'m-auto py-2 px-5 alert ' + color} style={{width: 'fit-content'}}>
             <li><h5>{response}</h5></li>
           </ul>
         ) : (

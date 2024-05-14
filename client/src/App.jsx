@@ -7,7 +7,7 @@ import Register from './components/Register'
 import { useState } from 'react'
 
 function App() {
-  const dynamicLink = (data) => (data.isActive ? 'nav-link active' : 'nav-link')
+  const dynamicLink = (e) => (e.isActive ? 'nav-link active' : 'nav-link')
   const [loggedUser, setLoggedUser] = useState(null)
 
   return (

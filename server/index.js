@@ -23,7 +23,7 @@ app.post(`/registerUser`, async (request, response) => {
   });
   console.log(user);
   await user.save();
-  response.send("Account registred successfully.");
+  response.send("Account registred successfully");
 });
 
 // logging in express route
