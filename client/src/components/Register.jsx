@@ -24,7 +24,18 @@ function Register() {
       return
     }
 
-    Axios.post(`http://localhost:4000/registerUser`, {
+    // check if user exists and it's taken
+    Axios.get(`http://localhost:4000/getUser/${user}`)
+    .then((response) => {
+      if (response.data.user[0] && response.data.user[0].username === user)
+        return setResponse("Username is taken")
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    
+    // register the user
+    Axios.post(`http://localhost:4000/addUser`, {
       username: user,
       password: pass
     })

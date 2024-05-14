@@ -16,10 +16,17 @@ function Login(props) {
       return
     }
 
-    Axios.get(`http://localhost:4000/loginUser/${user}`)
+    Axios.get(`http://localhost:4000/getUser/${user}`)
     .then((response) => {
-      if (!response.data.user[0]) return setResponse("Username doesn't exist")
-      if (response.data.user[0].password !== pass) return setResponse("Incorrect password")
+      // check if username exists
+      if (!response.data.user[0])
+        return setResponse("Username doesn't exist")
+
+      // check if password is correct
+      if (response.data.user[0].password !== pass)
+        return setResponse("Incorrect password")
+
+      // login the user
       props.setIsLogged(response.data.user[0].username)
       navigate('/')
     })
@@ -45,7 +52,7 @@ function Login(props) {
 
       {
         (response) ? (
-          <Alert text={response} color={'alert-danger'} />
+          <Alert text={response} />
         ) : (
           <></>
         )

@@ -15,8 +15,8 @@ app.listen(port, () => {
 const conString = "mongodb+srv://admin:admin@cluster.ajjsw6z.mongodb.net/database?retryWrites=true&w=majority&appName=Cluster";
 mongoose.connect(conString);
 
-// registering express route
-app.post(`/registerUser`, async (request, response) => {
+// add user express route
+app.post(`/addUser`, async (request, response) => {
   const user = new UserModel({
     username: request.body.username,
     password: request.body.password
@@ -26,9 +26,8 @@ app.post(`/registerUser`, async (request, response) => {
   response.send("Account registred successfully");
 });
 
-// logging in express route
-app.get(`/loginUser/:username`, async (request, response) => {
-  const u = request.params.username;
-  const user = await UserModel.find({username: u});
+// get user express route
+app.get(`/getUser/:username`, async (request, response) => {
+  const user = await UserModel.find({username: request.params.username});
   response.send({user});
 })
