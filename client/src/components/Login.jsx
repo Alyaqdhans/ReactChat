@@ -40,19 +40,20 @@ function Login(props) {
       <h1>Login</h1>
 
       <label className='form-label' htmlFor="user">Username</label>
-      <input onChange={(e) => setUser(e.target.value)} className='form-control mb-3' type="text" placeholder='Username' id='user' />
+      <input onChange={(e) => setUser(e.target.value.trim().toLowerCase())} className='form-control mb-3' type="text" placeholder='Username' id='user' />
 
       <label className='form-label' htmlFor="pass">Password</label>
       <input onChange={(e) => setPass(e.target.value)} className='form-control mb-3' type="password" placeholder='Password' id='pass' />
 
-      <div className='text-center my-3'>
-        <input onClick={handleLogin} className='btn btn-info me-3' type="submit" value="Login" />
-        <input className='btn btn-info' type="reset" value="Clear" />
-      </div>
+      <input onClick={handleLogin} className='btn btn-info me-3 mt-3' type="submit" value="Login" />
+      <input className='btn btn-info mt-3' type="reset" value="Clear" />
 
       {
         (response) ? (
+          <>
+          <hr style={{borderWidth: "3px"}} />
           <Alert text={response} />
+          </>
         ) : (
           <></>
         )
