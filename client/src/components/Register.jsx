@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
+import Alert from './Alert'
 
 function Register() {
   const [user, setUser] = useState()
@@ -56,9 +57,7 @@ function Register() {
 
       {
         (response) ? (
-          <ul className={'m-auto py-2 px-5 alert ' + color} style={{width: 'fit-content'}}>
-            <li><h5>{response}</h5></li>
-          </ul>
+          <Alert text={response} color={color} />
         ) : (
           <></>
         )

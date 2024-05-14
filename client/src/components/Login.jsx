@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
+import Alert from './Alert'
 
 function Login() {
   const [user, setUser] = useState()
@@ -39,9 +40,7 @@ function Login() {
 
       {
         (response) ? (
-          <ul className={'m-auto py-2 px-5 alert alert-danger'} style={{width: 'fit-content'}}>
-            <li><h5>{response}</h5></li>
-          </ul>
+          <Alert text={response} color={'alert-danger'} />
         ) : (
           <></>
         )
