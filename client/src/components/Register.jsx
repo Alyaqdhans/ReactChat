@@ -12,7 +12,7 @@ function Register() {
   const handleRegister = () => {
     // check if fields are empty
     if (!(user && pass && pass2)) {
-      setResponse("Some fields are empty")
+      setResponse("There are empty fields")
       setColor("alert-danger")
       return
     }

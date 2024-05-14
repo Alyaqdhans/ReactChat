@@ -2,11 +2,11 @@ import React from 'react'
 import Alert from './Alert'
 
 function Chat(props) {
-  if (props.loggedUser === null) 
+  if (props.isLogged === null) 
     return <Alert text='Login before acccessing the chat!' color='alert-warning' />
 
   return (
-    <div>Chat</div>
+    <div>Chat {props.isLogged}</div>
   )
 }
 

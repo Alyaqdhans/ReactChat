@@ -1,22 +1,27 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
 import Alert from './Alert'
+import { useNavigate } from 'react-router-dom'
 
-function Login() {
+function Login(props) {
   const [user, setUser] = useState()
   const [pass, setPass] = useState()
   const [response, setResponse] = useState()
+  const navigate = useNavigate()
 
   const handleLogin = () => {
     // check if fields are empty
     if (!(user && pass)) {
-      setResponse("Some fields are empty")
+      setResponse("There are empty fields")
       return
     }
 
     Axios.get(`http://localhost:4000/loginUser/${user}`)
     .then((response) => {
-      setResponse(response.data.user[0].username)
+      if (!response.data.user[0]) return setResponse("Username doesn't exist")
+      if (response.data.user[0].password !== pass) return setResponse("Incorrect password")
+      props.setIsLogged(response.data.user[0].username)
+      navigate('/')
     })
     .catch((error) => {
       console.log(error)
