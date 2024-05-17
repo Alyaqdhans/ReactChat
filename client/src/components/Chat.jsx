@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Alert from './Alert'
 import moment from 'moment-timezone'
-import ScrollToBottom from 'react-scroll-to-bottom'
 import Axios from 'axios'
 
 function Chat({isLogged, socket, userCount}) {
@@ -60,6 +59,12 @@ function Chat({isLogged, socket, userCount}) {
     })
   }, [])
 
+  // auto scroll
+  const bottom = useRef(null)
+  useEffect(() => {
+    bottom.current.scrollIntoView()
+  }, [messageList])
+
   return (
     <form onSubmit={(e) => e.preventDefault()} className='chat-window'>
       <h2>Welcome <code><b>{isLogged}</b></code> to the chat</h2>
@@ -67,7 +72,6 @@ function Chat({isLogged, socket, userCount}) {
         <h4><span></span>Live {userCount}</h4>
       </div>
       <div className="chat-body">
-        <ScrollToBottom className='message-container'>
           {
             messageList?.map((msg, index) => {
               return (
@@ -85,7 +89,7 @@ function Chat({isLogged, socket, userCount}) {
               )
             })
           }
-        </ScrollToBottom>
+          <div ref={bottom}></div>
       </div>
       <div className="chat-footer d-flex">
         <input onChange={(e) => setMessage(e.target.value)} className='form-control me-2' type='text' value={message} placeholder='message' />
