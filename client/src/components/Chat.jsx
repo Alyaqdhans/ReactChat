@@ -22,10 +22,12 @@ function Chat({isLogged, socket, userCount}) {
       lastEdited: date.format('D/M/Y h:m A')
     }
 
+    // live send to clients
     await socket.emit("send_message", messageData)
     setMessageList((list) => [...list, messageData])
     setMessage("")
 
+    // store message in database
     Axios.post(`http://localhost:4000/storeMessage`, {
       username: isLogged,
       text: message,
@@ -39,14 +41,38 @@ function Chat({isLogged, socket, userCount}) {
     .catch((error) => {
       console.log(error)
     })
-}
+  }
+
+  const deleteMessage = async (_id) => {
+    if (!window.confirm("Are you sure you want to delete?")) return
+
+    // live delete from clients
+    await socket.emit("delete_message", _id)
+    setMessageList(messageList.filter((msg) => msg._id != _id))
+
+    // delete message from database
+    Axios.delete(`http://localhost:4000/deleteMessage/${_id}`)
+    .then((response) => {
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
 
   useEffect(() => {
+    // get live messages
     socket.off("receive_message").on("receive_message", (msg) => {
       setMessageList((list) => [...list, msg])
     })
+
+    // get messages after delete
+    socket.off("deleting_message").on("deleting_message", (_id) => {
+      setMessageList(messageList.filter((msg) => msg._id != _id))
+    })
   }, [socket])
 
+  // get previous messages from database
   useEffect(() => {
     Axios.get(`http://localhost:4000/retreiveMessages`)
     .then((response) => {
@@ -81,6 +107,7 @@ function Chat({isLogged, socket, userCount}) {
                     <div className="message-content">
                       <p>{msg.text}</p>
                     </div>
+                    <input id='modify' className={'btn btn-danger ' + (isLogged !== msg.username ? "d-none" : "")} onClick={() => deleteMessage(msg._id)} type="button" value='delete' />
                     <div className="message-meta">
                       <p id='time'>{msg.date}</p>
                     </div>

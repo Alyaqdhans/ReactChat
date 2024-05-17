@@ -38,6 +38,10 @@ io.on("connection", (socket) => {
   socket.on("send_message", (msg) => {
     socket.to(room).emit("receive_message", msg);
   });
+
+  socket.on("delete_message", (_id) => {
+    socket.to(room).emit("deleting_message", _id);
+  })
 });
 
 const port = 4000;
@@ -83,4 +87,10 @@ app.post(`/storeMessage`, async (request, response) => {
 app.get(`/retreiveMessages`, async (request, response) => {
   const msgs = await MessageModel.find();
   response.send({msgs});
+});
+
+// delete msg express route
+app.delete(`/deleteMessage/:_id`, async (request, response) => {
+  await MessageModel.findOneAndDelete({_id: request.params._id});
+  response.send("Message deleted successfully");
 });

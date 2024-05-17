@@ -132,3 +132,10 @@
   width: fit-content;
   padding-inline: 5px;
 }
+
+.message #modify {
+  border-radius: 0 0 5px 5px;
+  font-size: 12px;
+  padding: 3px;
+  margin-left: 10px;
+}
