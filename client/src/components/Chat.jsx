@@ -8,12 +8,12 @@ function Chat({isLogged, socket, userCount}) {
     return <Alert text='Login before acccessing the chat!' color='alert-warning' />
 
   const [message, setMessage] = useState("")
-  const [messageList, setMessageList] = useState([])
+  let [messageList, setMessageList] = useState([])
 
+  const date = moment.tz(new Date(Date.now()), "Asia/Muscat")
   const sendMessage = async () => {
     if (!message) return
 
-    const date = moment.tz(new Date(Date.now()), "Asia/Muscat")
     const messageData = {
       username: isLogged,
       text: message,
@@ -48,7 +48,7 @@ function Chat({isLogged, socket, userCount}) {
 
     // live delete from clients
     await socket.emit("delete_message", _id)
-    setMessageList(messageList.filter((msg) => msg._id != _id))
+    setMessageList((list) => [...list.filter((msg) => {return msg._id !== _id})])
 
     // delete message from database
     Axios.delete(`http://localhost:4000/deleteMessage/${_id}`)
@@ -60,20 +60,73 @@ function Chat({isLogged, socket, userCount}) {
     })
   }
 
+  // transfare msg info to main input and switching to edit mode
+  const [edit, setEdit] = useState(false)
+  const [editMsg, setEditMsg] = useState()
+  const editMessage = (msg) => {
+    setEdit(true)
+    setMessage(msg.text)
+    setEditMsg(msg)
+  }
+
+  const saveEditMessage = async () => {
+    // live edit from clients
+    await socket.emit("edit_message", editMsg._id)
+    messageList.filter((msg) => {
+      if (msg._id === editMsg._id) {
+        msg.edited = true
+        msg.text = message
+        msg.lastEdited = date.format('D/M/Y h:m A')
+      }
+    })
+
+    // edit message from database
+    Axios.put(`http://localhost:4000/editMessage/${editMsg._id}`, {
+      text: message,
+      edited: true,
+      lastEdited: date.format('D/M/Y h:m A')
+    })
+    .then((response) => {
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+
+    // restoring main input to default
+    setEdit(false)
+    setMessage("")
+    setEditMsg(null)
+  }
+
   useEffect(() => {
-    // get live messages
-    socket.off("receive_message").on("receive_message", (msg) => {
+    // live refresh messages
+    socket.off("sending_message").on("sending_message", (msg) => {
       setMessageList((list) => [...list, msg])
     })
 
-    // get messages after delete
+    // live remove deleted message
     socket.off("deleting_message").on("deleting_message", (_id) => {
-      setMessageList(messageList.filter((msg) => msg._id != _id))
+      setMessageList((list) => [...list.filter((msg) => {return msg._id !== _id})])
+    })
+
+    // live change edited message
+    socket.off("editing_message").on("editing_message", (_id) => {
+      messageList.filter((msg) => {
+        if (msg._id === _id) {
+          msg.edited = true
+          msg.text = message
+          msg.lastEdited = date.format('D/M/Y h:m A')
+        }
+      })
     })
   }, [socket])
 
-  // get previous messages from database
   useEffect(() => {
+    // clear current list to avoid duplicates
+    setMessageList([])
+
+    // get previous messages from database
     Axios.get(`http://localhost:4000/retreiveMessages`)
     .then((response) => {
       response.data.msgs.map((msg) => {
@@ -107,9 +160,12 @@ function Chat({isLogged, socket, userCount}) {
                     <div className="message-content">
                       <p>{msg.text}</p>
                     </div>
-                    <input id='modify' className={'btn btn-danger ' + (isLogged !== msg.username ? "d-none" : "")} onClick={() => deleteMessage(msg._id)} type="button" value='delete' />
+                    <div id='modify' className='d-flex'>
+                      <input className={'btn btn-danger ms-1 ' + (isLogged !== msg.username ? "d-none" : "")} onClick={() => deleteMessage(msg._id)} type="button" value='delete' />
+                      <input className={'btn btn-warning ' + (isLogged !== msg.username ? "d-none" : "")} onClick={() => editMessage(msg)} type="button" value='edit' />
+                    </div>
                     <div className="message-meta">
-                      <p id='time'>{msg.date}</p>
+                      <p id='time'>{msg.date} {msg.edited ? (<span title={msg.lastEdited}>(edited)</span>) : ""}</p>
                     </div>
                   </div>
                 </div>
@@ -120,7 +176,13 @@ function Chat({isLogged, socket, userCount}) {
       </div>
       <div className="chat-footer d-flex">
         <input onChange={(e) => setMessage(e.target.value)} className='form-control me-2' type='text' value={message} placeholder='message' />
-        <input onClick={sendMessage} className='btn btn-info m-auto' type="submit" value="Send" />
+        {
+          (edit) ? (
+            <input onClick={saveEditMessage} className='btn btn-warning m-auto' type="submit" value="Save" />
+          ) : (
+            <input onClick={sendMessage} className='btn btn-info m-auto' type="submit" value="Send" />
+          )
+        }
       </div>
     </form>
   )

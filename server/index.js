@@ -36,11 +36,15 @@ io.on("connection", (socket) => {
   socket.join(room);
 
   socket.on("send_message", (msg) => {
-    socket.to(room).emit("receive_message", msg);
+    socket.to(room).emit("sending_message", msg);
   });
 
   socket.on("delete_message", (_id) => {
     socket.to(room).emit("deleting_message", _id);
+  })
+
+  socket.on("edit_message", (_id) => {
+    socket.to(room).emit("editing_message", _id);
   })
 });
 
@@ -58,7 +62,6 @@ app.post(`/addUser`, async (request, response) => {
     username: request.body.username,
     password: request.body.password
   });
-  console.log(user);
   await user.save();
   response.send("Account registred successfully");
 });
@@ -78,7 +81,6 @@ app.post(`/storeMessage`, async (request, response) => {
     edited: request.body.edited,
     lastEdited: request.body.lastEdited
   });
-  console.log(msg);
   await msg.save();
   response.send("Message saved successfully");
 });
@@ -93,4 +95,15 @@ app.get(`/retreiveMessages`, async (request, response) => {
 app.delete(`/deleteMessage/:_id`, async (request, response) => {
   await MessageModel.findOneAndDelete({_id: request.params._id});
   response.send("Message deleted successfully");
+});
+
+// edit msg express route
+app.put("/editMessage/:_id", async (request, response) => {
+  const msg = await MessageModel.findOne({ _id: request.params._id });
+  msg.text = String(request.body.text);
+  msg.edited = Boolean(request.body.edited);
+  msg.lastEdited = String(request.body.lastEdited);
+
+  await msg.save();
+  response.send("Message updated successfully");
 });

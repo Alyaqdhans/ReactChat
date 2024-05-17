@@ -33,10 +33,12 @@
   background: rgb(148, 148, 148);
   width: fit-content;
   padding-inline: 7px;
-  padding-block: 1px;
+  padding-block: 2px;
   border-radius: 10px;
   color: white;
 }
+
+.chat-header h4 {margin: 0;}
 
 .chat-header span {
   display: inline-block;
@@ -83,9 +85,9 @@
   width: auto;
   height: auto;
   min-height: 40px;
-  max-width: 250px;
-  background-color: #43a047;
-  border-radius: 0 5px 5px 5px;
+  max-width: 500px;
+  background: #43a047;
+  border-radius: 0 0 5px 5px;
   color: white;
   display: flex;
   align-items: center;
@@ -105,7 +107,6 @@
 
 #you .message-meta {
   justify-content: flex-start;
-  margin-left: 5px;
 }
 
 #other {
@@ -113,7 +114,7 @@
 }
 
 #other .message-content {
-  background-color: cornflowerblue;
+  background: cornflowerblue;
 }
 
 #other .message-meta {
@@ -126,16 +127,20 @@
 }
 
 .message #author {
-  background: gray;
-  color: white;
+  background: #43a047;
+  color: rgb(235, 235, 235);
   border-radius: 10px 10px 0 0;
-  width: fit-content;
   padding-inline: 5px;
+  font-size: 12px;
 }
 
-.message #modify {
+#other #author {
+  background: cornflowerblue;
+}
+
+.message #modify input {
   border-radius: 0 0 5px 5px;
   font-size: 12px;
-  padding: 3px;
-  margin-left: 10px;
+  padding: 5px;
+  padding-block: 0;
 }
