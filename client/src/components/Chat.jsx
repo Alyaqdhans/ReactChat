@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Alert from './Alert'
 import moment from 'moment-timezone'
 import ScrollToBottom from 'react-scroll-to-bottom'
+import Axios from 'axios'
 
 function Chat({isLogged, socket, userCount}) {
   if (isLogged === null) 
@@ -16,20 +17,48 @@ function Chat({isLogged, socket, userCount}) {
     const date = moment.tz(new Date(Date.now()), "Asia/Muscat")
     const messageData = {
       username: isLogged,
-      message: message,
-      date: date.format('D/M/Y h:m A')
+      text: message,
+      date: date.format('D/M/Y h:m A'),
+      edited: false,
+      lastEdited: date.format('D/M/Y h:m A')
     }
 
     await socket.emit("send_message", messageData)
     setMessageList((list) => [...list, messageData])
     setMessage("")
-  }
+
+    Axios.post(`http://localhost:4000/storeMessage`, {
+      username: isLogged,
+      text: message,
+      date: date.format('D/M/Y h:m A'),
+      edited: false,
+      lastEdited: date.format('D/M/Y h:m A')
+    })
+    .then((response) => {
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
 
   useEffect(() => {
     socket.off("receive_message").on("receive_message", (msg) => {
       setMessageList((list) => [...list, msg])
     })
   }, [socket])
+
+  useEffect(() => {
+    Axios.get(`http://localhost:4000/retreiveMessages`)
+    .then((response) => {
+      response.data.msgs.map((msg) => {
+        setMessageList((list) => [...list, msg])
+      })
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }, [])
 
   return (
     <form onSubmit={(e) => e.preventDefault()} className='chat-window'>
@@ -40,13 +69,13 @@ function Chat({isLogged, socket, userCount}) {
       <div className="chat-body">
         <ScrollToBottom className='message-container'>
           {
-            messageList.map((msg, index) => {
+            messageList?.map((msg, index) => {
               return (
                 <div className='message' id={isLogged === msg.username ? "you" : "other"} key={index}>
                   <div>
                     <p id='author'>{msg.username}</p>
                     <div className="message-content">
-                      <p>{msg.message}</p>
+                      <p>{msg.text}</p>
                     </div>
                     <div className="message-meta">
                       <p id='time'>{msg.date}</p>
@@ -59,7 +88,7 @@ function Chat({isLogged, socket, userCount}) {
         </ScrollToBottom>
       </div>
       <div className="chat-footer d-flex">
-        <textarea onChange={(e) => setMessage(e.target.value)} className='form-control me-2' style={{resize: "none"}} value={message} placeholder='message'></textarea>
+        <input onChange={(e) => setMessage(e.target.value)} className='form-control me-2' type='text' value={message} placeholder='message' />
         <input onClick={sendMessage} className='btn btn-info m-auto' type="submit" value="Send" />
       </div>
     </form>

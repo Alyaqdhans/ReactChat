@@ -64,3 +64,23 @@ app.get(`/getUser/:username`, async (request, response) => {
   const user = await UserModel.find({username: request.params.username});
   response.send({user});
 });
+
+// store message express route
+app.post(`/storeMessage`, async (request, response) => {
+  const msg = new MessageModel({
+    username: request.body.username,
+    text: request.body.text,
+    date: request.body.date,
+    edited: request.body.edited,
+    lastEdited: request.body.lastEdited
+  });
+  console.log(msg);
+  await msg.save();
+  response.send("Message saved successfully");
+});
+
+// retreive msg express route
+app.get(`/retreiveMessages`, async (request, response) => {
+  const msgs = await MessageModel.find();
+  response.send({msgs});
+});
