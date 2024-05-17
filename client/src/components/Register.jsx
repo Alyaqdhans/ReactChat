@@ -19,7 +19,7 @@ function Register() {
 
     // make sure user password is correct
     if (pass !== pass2) {
-      setResponse("Passwords doesn't match")
+      setResponse("Passwords don't match")
       setColor("alert-danger")
       return
     }

@@ -8,20 +8,20 @@ import Register from './components/Register'
 import Logout from './components/Logout'
 
 function App() {
-  const dynamicLink = (e) => (e.isActive ? 'nav-link active' : 'nav-link')
+  const dynamicLink = (e) => (e.isActive ? 'active' : '')
   const [isLogged, setIsLogged] = useState(null)
 
   return (
     <>
     <nav className='nav justify-content-center bg-warning py-2' style={{fontWeight: 'bold'}}>
-      <NavLink className={dynamicLink} to='/'>Chat</NavLink>
+      <NavLink className={'nav-link ' + dynamicLink} to='/'>Chat</NavLink>
       {
         (isLogged) ? (
-          <NavLink className={dynamicLink} to='/logout'>Logout</NavLink>
+          <NavLink className={'nav-link ' + dynamicLink} to='/logout'>Logout</NavLink>
         ) : (
           <>
-          <NavLink className={dynamicLink} to='/login'>Login</NavLink>
-          <NavLink className={dynamicLink} to='/register'>Register</NavLink>
+          <NavLink className={'nav-link ' + dynamicLink} to='/login'>Login</NavLink>
+          <NavLink className={'nav-link ' + dynamicLink} to='/register'>Register</NavLink>
           </>
         )
       }
