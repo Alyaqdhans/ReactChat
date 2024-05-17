@@ -6,6 +6,7 @@ import Chat from './components/Chat'
 import Login from './components/Login'
 import Register from './components/Register'
 import Logout from './components/Logout'
+import About from './components/About'
 
 function App() {
   const dynamicLink = (e) => (e.isActive ? 'active' : '')
@@ -25,6 +26,7 @@ function App() {
           </>
         )
       }
+      <NavLink className={'nav-link ' + dynamicLink} to='/about'>About</NavLink>
     </nav>
     <main className='container-fluid m-auto my-5 w-50 rounded border p-3' style={{background: "lightgray", fontWeight: "bold"}}>
       <Routes>
@@ -32,6 +34,7 @@ function App() {
         <Route path='/login' element={<Login setIsLogged={setIsLogged} />} />
         <Route path='/register' element={<Register />} />
         <Route path='/logout' element={<Logout setIsLogged={setIsLogged} />} />
+        <Route path='/about' element={<About />} />
       </Routes>
     </main>
     </>
