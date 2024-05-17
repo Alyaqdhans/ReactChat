@@ -26,3 +26,117 @@
 .btn {
   font-weight: bold !important;
 }
+
+/* chat style */
+.chat-header {
+  border: 2px solid rgb(102, 102, 102);
+  background: rgb(148, 148, 148);
+  width: fit-content;
+  padding-inline: 7px;
+  padding-block: 1px;
+  border-radius: 10px;
+  color: white;
+}
+
+.chat-header span {
+  display: inline-block;
+  border: 8px solid rgb(0, 255, 0);
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.chat-window p {
+  margin: 0;
+}
+
+.chat-window .chat-body {
+  height: calc(450px);
+  border: 1px solid #263238;
+  background: #fff;
+  border-radius: 10px;
+  margin-block: 1rem;
+}
+
+.chat-window .chat-body .message-container {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.chat-window .chat-body ::-webkit-scrollbar {
+  width: 1.5rem;
+}
+
+.chat-window .chat-body ::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+  border: 5px solid white;
+}
+
+.chat-window .chat-body ::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+.chat-window .chat-body .message-container::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-window .chat-body .message {
+  padding: 10px;
+  display: flex;
+}
+
+.chat-window .chat-body .message .message-content {
+  width: auto;
+  height: auto;
+  min-height: 40px;
+  max-width: 250px;
+  background-color: #43a047;
+  border-radius: 0 5px 5px 5px;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  padding-inline: 10px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+#you {
+  justify-content: flex-start;
+}
+
+#you .message-content {
+  justify-content: flex-start;
+}
+
+#you .message-meta {
+  justify-content: flex-start;
+  margin-left: 5px;
+}
+
+#other {
+  justify-content: flex-end;
+}
+
+#other .message-content {
+  background-color: cornflowerblue;
+}
+
+#other .message-meta {
+  justify-content: flex-end;
+  margin-right: 5px;
+}
+
+.chat-window .chat-body .message .message-meta {
+  font-size: 12px;
+}
+
+.message #author {
+  background: gray;
+  color: white;
+  border-radius: 10px 10px 0 0;
+  width: fit-content;
+  padding-inline: 5px;
+}

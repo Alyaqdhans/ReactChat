@@ -2,13 +2,46 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import UserModel from './models/User.js';
+import MessageModel from './models/Message.js';
+
+import { Server } from 'socket.io';
+import http from 'http';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+let userCount = 0;
+const room = "global";
+io.on("connection", (socket) => {
+  userCount++;
+  io.emit("users", userCount);
+  console.log(`User connected: ${socket.id}`);
+
+  socket.on("disconnect", () => {
+    userCount--;
+    io.emit("users", userCount);
+    console.log(`User disconnected: ${socket.id}`);
+  });
+
+  socket.join(room);
+
+  socket.on("send_message", (msg) => {
+    socket.to(room).emit("receive_message", msg);
+  });
+});
+
 const port = 4000;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is online on port ${port}!`);
 });
 
@@ -30,4 +63,4 @@ app.post(`/addUser`, async (request, response) => {
 app.get(`/getUser/:username`, async (request, response) => {
   const user = await UserModel.find({username: request.params.username});
   response.send({user});
-})
+});
