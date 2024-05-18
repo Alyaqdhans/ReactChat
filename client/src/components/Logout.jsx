@@ -11,7 +11,7 @@ function Logout(props) {
 
   setTimeout(() => {
     handleLogout()
-  }, 1000);
+  }, 500);
   
   return (
     <h1 className='text-center'>Logging out...</h1>
