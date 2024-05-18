@@ -28,6 +28,7 @@ function Login(props) {
         return setResponse("Incorrect password")
 
       // login the user
+      props.socket.emit("join")
       props.setIsLogged(response.data.username)
       navigate('/')
     })

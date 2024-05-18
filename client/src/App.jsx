@@ -39,9 +39,9 @@ function App() {
     <main className='container-fluid m-auto my-5 w-50 rounded border p-3' style={{background: "lightgray", fontWeight: "bold"}}>
       <Routes>
         <Route path='/' element={<Chat isLogged={isLogged} socket={socket} userCount={userCount} />} />
-        <Route path='/login' element={<Login setIsLogged={setIsLogged} />} />
+        <Route path='/login' element={<Login setIsLogged={setIsLogged} socket={socket} />} />
         <Route path='/register' element={<Register />} />
-        <Route path='/logout' element={<Logout setIsLogged={setIsLogged} />} />
+        <Route path='/logout' element={<Logout setIsLogged={setIsLogged} socket={socket} />} />
         <Route path='/about' element={<About />} />
       </Routes>
     </main>

@@ -23,17 +23,25 @@ const io = new Server(server, {
 let userCount = 0;
 const room = "global";
 io.on("connection", (socket) => {
-  userCount++;
-  io.emit("users", userCount);
   console.log(`User connected: ${socket.id}`);
 
   socket.on("disconnect", () => {
-    userCount--;
-    io.emit("users", userCount);
     console.log(`User disconnected: ${socket.id}`);
   });
 
-  socket.join(room);
+  // broadcast new user count
+  socket.on("join", () => {
+    userCount++;
+    io.emit("users", userCount);
+    socket.join(room);
+  });
+
+  // broadcast left user count
+  socket.on("leave", () => {
+    userCount--;
+    io.emit("users", userCount);
+    socket.leave(room);
+  });
 
   // broadcasting new message to clients
   socket.on("send_message", (msg) => {

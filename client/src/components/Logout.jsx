@@ -5,6 +5,7 @@ function Logout(props) {
   const navigate = useNavigate()
 
   useEffect(() => {
+    props.socket.emit("leave")
     props.setIsLogged(null)
     navigate('/login')
   }, [])
