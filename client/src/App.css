@@ -1,3 +1,25 @@
+/* header style */
+header h1 {
+  margin: 0;
+}
+
+header h1:nth-of-type(1) {
+  height: fit-content;
+  background: white;
+  padding: 5px;
+  padding-inline: 10px;
+  border-radius: 10px 0 0 10px;
+}
+
+header h1:nth-of-type(2) {
+  height: fit-content;
+  color: white;
+  background: black;
+  padding: 5px;
+  padding-inline: 10px;
+  border-radius: 0 10px 10px 0;
+}
+
 /* nav style */
 .nav-link {
   position: relative;
@@ -18,8 +40,14 @@
   pointer-events: none;
 }
 
-.active::after {
+nav .active::after {
   transform: scaleX(100%);
+}
+
+nav div {
+  background: green !important;
+  color: white !important;
+  border-radius: 10px;
 }
 
 /* buttons bold font */
@@ -28,6 +56,26 @@
 }
 
 /* chat style */
+#chat-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#chat-top > h2:nth-of-type(1) {
+  grid-column: span 2;
+}
+
+.chat-window .chat-header {
+  grid-column: 2 / -1;
+  margin-left: auto;
+}
+
+.chat-window .chat-header, .chat-window > h2 {
+  margin-top: auto;
+  height: fit-content;
+  width: fit-content;
+}
+
 .chat-header {
   border: 2px solid rgb(102, 102, 102);
   background: rgb(148, 148, 148);
@@ -42,7 +90,7 @@
 
 .chat-header span {
   display: inline-block;
-  border: 8px solid rgb(0, 255, 0);
+  border: 8px solid red;
   border-radius: 50%;
   margin-right: 5px;
 }

@@ -3,7 +3,7 @@ import Alert from './Alert'
 import moment from 'moment-timezone'
 import Axios from 'axios'
 
-function Chat({isLogged, socket, userCount}) {
+function Chat({isLogged, socket, chatCount}) {
   if (isLogged === null) 
     return <Alert text='Login before acccessing the chat!' color='alert-warning' />
 
@@ -139,9 +139,11 @@ function Chat({isLogged, socket, userCount}) {
 
   return (
     <form onSubmit={(e) => e.preventDefault()} className='chat-window'>
-      <h2>Welcome <code><b>{isLogged}</b></code> to the chat</h2>
-      <div className="chat-header">
-        <h4><span></span>Live {userCount}</h4>
+      <div id='chat-top'>
+        <h2 className='m-0'>Welcome <code><b>{isLogged}</b></code></h2> <h2>to the chat</h2>
+        <div className="chat-header" style={{minWidth: "101px"}}>
+          <h4><span></span>{chatCount} Live</h4>
+        </div>
       </div>
       <div className="chat-body">
           {

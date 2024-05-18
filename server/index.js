@@ -20,27 +20,34 @@ const io = new Server(server, {
   },
 });
 
-let userCount = 0;
 const room = "global";
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
+  // send user count
+  io.emit("users", io.engine.clientsCount);
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     console.log(`User disconnected: ${socket.id}`);
+    // send user count
+    io.emit("users", io.engine.clientsCount);
+    const users = await io.of('/').in(room).fetchSockets();
+    io.emit("chatters", users.length);
   });
 
-  // broadcast new user count
-  socket.on("join", () => {
-    userCount++;
-    io.emit("users", userCount);
+  socket.on("join", async () => {
+    // join user the chat
     socket.join(room);
+    // send user count
+    const users = await io.of('/').in(room).fetchSockets();
+    io.emit("chatters", users.length);
   });
 
-  // broadcast left user count
-  socket.on("leave", () => {
-    userCount--;
-    io.emit("users", userCount);
+  socket.on("leave", async () => {
+    // leave user the chat
     socket.leave(room);
+    // send user count
+    const users = await io.of('/').in(room).fetchSockets();
+    io.emit("chatters", users.length);
   });
 
   // broadcasting new message to clients

@@ -20,10 +20,15 @@ function App() {
     setUserCount(users)
   })
 
+  const [chatCount, setChatCount] = useState(0);
+  socket.on("chatters", (users) => {
+    setChatCount(users)
+  })
+
   return (
     <>
-    <header className='text-center text-white bg-info p-2'>
-      <h1 className='m-0'>🗨 ReactChat</h1>
+    <header className='bg-info p-2 d-flex justify-content-center'>
+      <h1>🗨</h1><h1 className='m-0'>ReactChat</h1>
     </header>
     <nav className='nav justify-content-center bg-warning py-2' style={{fontWeight: 'bold'}}>
       <NavLink className={'nav-link ' + dynamicLink} to='/'>Chat</NavLink>
@@ -38,10 +43,11 @@ function App() {
         )
       }
       <NavLink className={'nav-link ' + dynamicLink} to='/about'>About</NavLink>
+      <div className='nav-link'>{userCount} Online</div>
     </nav>
     <main className='container-fluid m-auto my-5 w-50 rounded border p-3' style={{background: "lightgray", fontWeight: "bold"}}>
       <Routes>
-        <Route path='/' element={<Chat isLogged={isLogged} socket={socket} userCount={userCount} />} />
+        <Route path='/' element={<Chat isLogged={isLogged} socket={socket} chatCount={chatCount} />} />
         <Route path='/login' element={<Login setIsLogged={setIsLogged} socket={socket} />} />
         <Route path='/register' element={<Register />} />
         <Route path='/logout' element={<Logout setIsLogged={setIsLogged} socket={socket} />} />
