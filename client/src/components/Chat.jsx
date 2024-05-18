@@ -12,7 +12,7 @@ function Chat({isLogged, socket, userCount}) {
 
   const date = moment.tz(new Date(Date.now()), "Asia/Muscat")
   const sendMessage = () => {
-    if (!message) return
+    if (!message || !message.trim()) return
 
     // store message in database
     Axios.post(`http://localhost:4000/storeMessage`, {
@@ -48,16 +48,25 @@ function Chat({isLogged, socket, userCount}) {
     })
   }
 
-  // transfare msg info to main input and switching to edit mode
+  // switching main input to edit mode
   const [edit, setEdit] = useState(false)
   const [editMsg, setEditMsg] = useState()
-  const editMessage = (msg) => {
+  const editMode = (msg) => {
     setEdit(true)
     setMessage(msg.text)
     setEditMsg(msg)
   }
 
-  const saveEditMessage = () => {
+  // restoring main input to default
+  const restoreEditMode = () => {
+    setEdit(false)
+    setMessage("")
+    setEditMsg(null)
+  }
+
+  const editMessage = () => {
+    if (!message || !message.trim()) return
+
     // edit message from database
     Axios.put(`http://localhost:4000/editMessage/${editMsg._id}`, {
       text: message,
@@ -81,24 +90,21 @@ function Chat({isLogged, socket, userCount}) {
       console.log(error);
     })
 
-    // restoring main input to default
-    setEdit(false)
-    setMessage("")
-    setEditMsg(null)
+    restoreEditMode()
   }
 
-  // live refresh messages
-  socket.off("sending_message").on("sending_message", (msg) => {
-    setMessageList((list) => [...list, msg])
+  // live add the new message
+  socket.on("sending_message", (msg) => {
+    setMessageList([...messageList, msg])
   })
 
   // live remove deleted message
-  socket.off("deleting_message").on("deleting_message", (_id) => {
-    setMessageList((list) => [...list.filter((msg) => {return msg._id !== _id})])
+  socket.on("deleting_message", (_id) => {
+    setMessageList([...messageList.filter((msg) => {return msg._id !== _id})])
   })
 
   // live change edited message
-  socket.off("editing_message").on("editing_message", (msgList) => {
+  socket.on("editing_message", (msgList) => {
     setMessageList(msgList)
   })
 
@@ -142,7 +148,7 @@ function Chat({isLogged, socket, userCount}) {
                     </div>
                     <div id='modify' className='d-flex'>
                       <input className={'btn btn-danger ms-1 ' + (isLogged !== msg.username ? "d-none" : "")} onClick={() => deleteMessage(msg._id)} type="button" value='delete' />
-                      <input className={'btn btn-warning ' + (isLogged !== msg.username ? "d-none" : "")} onClick={() => editMessage(msg)} type="button" value='edit' />
+                      <input className={'btn btn-warning ' + (isLogged !== msg.username ? "d-none" : "")} onClick={() => editMode(msg)} type="button" value='edit' />
                     </div>
                     <div className="message-meta">
                       <p id='time'>{msg.date} {msg.edited ? (<span title={msg.lastEdited}>(edited)</span>) : ""}</p>
@@ -158,7 +164,10 @@ function Chat({isLogged, socket, userCount}) {
         <input onChange={(e) => setMessage(e.target.value)} className='form-control me-2' type='text' value={message} placeholder='message' />
         {
           (edit) ? (
-            <input onClick={saveEditMessage} className='btn btn-warning m-auto' type="submit" value="Save" />
+            <>
+            <input onClick={restoreEditMode} className='btn btn-danger m-auto me-1' type="button" value="Cancel" />
+            <input onClick={editMessage} className='btn btn-warning m-auto' type="submit" value="Save" />
+            </>
           ) : (
             <input onClick={sendMessage} className='btn btn-info m-auto' type="submit" value="Send" />
           )
