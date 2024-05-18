@@ -26,7 +26,7 @@ function App() {
       <NavLink className={'nav-link ' + dynamicLink} to='/'>Chat</NavLink>
       {
         (isLogged) ? (
-          <NavLink className={'nav-link ' + dynamicLink} to='/logout'>Logout</NavLink>
+          <NavLink className={'nav-link text-danger ' + dynamicLink} to='/logout'>Logout</NavLink>
         ) : (
           <>
           <NavLink className={'nav-link ' + dynamicLink} to='/login'>Login</NavLink>
