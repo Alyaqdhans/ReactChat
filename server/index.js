@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
     console.log(`User disconnected: ${socket.id}`);
     // send user count
     io.emit("users", io.engine.clientsCount);
-    const users = await io.of('/').in(room).fetchSockets();
+    const users = await io.in(room).fetchSockets();
     io.emit("chatters", users.length);
   });
 
@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
     // join user the chat
     socket.join(room);
     // send user count
-    const users = await io.of('/').in(room).fetchSockets();
+    const users = await io.in(room).fetchSockets();
     io.emit("chatters", users.length);
   });
 

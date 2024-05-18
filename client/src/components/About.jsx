@@ -20,6 +20,7 @@ function About() {
         <h4><a target='_blank' href="https://socket.io/"><li>Socket.io</li></a> <span>(Realtime changes)</span></h4>
         <h4><a target='_blank' href="https://vitejs.dev/"><li>Vite</li></a> <span>(Smaller app size)</span></h4>
         <h4><a target='_blank' href="https://www.npmjs.com/package/nodemon"><li>Nodemon</li></a> <span>(Auto restart server)</span></h4>
+        <h4><a target='_blank' href="https://www.npmjs.com/package/moment-timezone"><li>moment-timezone</li></a> <span>(Correct date)</span></h4>
 
         <h3 className='mt-3 mb-0'>Styling</h3>
         <h4><a target='_blank' href="https://getbootstrap.com/"><li>Bootstrap</li></a></h4>
