@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
   // broadcasting deleted message to clients
   socket.on("delete_message", (_id) => {
     io.to(room).emit("deleting_message", _id);
-  })
+  });
 
   // broadcasting edited message to clients
   socket.on("edit_message", (msgList) => {

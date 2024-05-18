@@ -124,9 +124,16 @@ function Chat({isLogged, socket, userCount}) {
     })
   }, [])
 
-  // auto scroll
+  // auto scroll handler
+  const [autoScroll, setAutoScroll] = useState(true)
+  const handleAutoScroll = () => {
+    setAutoScroll(!autoScroll)
+  }
+
   const bottom = useRef(null)
   useEffect(() => {
+    if (!autoScroll) return
+
     bottom.current.scrollIntoView()
   }, [messageList])
 
@@ -158,7 +165,7 @@ function Chat({isLogged, socket, userCount}) {
               )
             })
           }
-          <div ref={bottom}></div>
+          <div id='bottom' ref={bottom}><input onClick={handleAutoScroll} type='button' className={'btn ' + (autoScroll ? 'btn-success' : 'btn-danger')} /></div>
       </div>
       <div className="chat-footer d-flex">
         <input onChange={(e) => setMessage(e.target.value)} className='form-control me-2' type='text' value={message} placeholder='message' />
