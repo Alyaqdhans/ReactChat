@@ -22,6 +22,9 @@ function App() {
 
   return (
     <>
+    <header className='text-center text-white bg-info p-2'>
+      <h1 className='m-0'>🗨 ReactChat</h1>
+    </header>
     <nav className='nav justify-content-center bg-warning py-2' style={{fontWeight: 'bold'}}>
       <NavLink className={'nav-link ' + dynamicLink} to='/'>Chat</NavLink>
       {
