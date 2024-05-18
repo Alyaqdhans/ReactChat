@@ -35,16 +35,19 @@ io.on("connection", (socket) => {
 
   socket.join(room);
 
+  // broadcasting new message to clients
   socket.on("send_message", (msg) => {
-    socket.to(room).emit("sending_message", msg);
+    io.to(room).emit("sending_message", msg);
   });
 
+  // broadcasting deleted message to clients
   socket.on("delete_message", (_id) => {
-    socket.to(room).emit("deleting_message", _id);
+    io.to(room).emit("deleting_message", _id);
   })
 
-  socket.on("edit_message", (_id) => {
-    socket.to(room).emit("editing_message", _id);
+  // broadcasting edited message to clients
+  socket.on("edit_message", (msgList) => {
+    io.to(room).emit("editing_message", msgList);
   })
 });
 
@@ -63,13 +66,14 @@ app.post(`/addUser`, async (request, response) => {
     password: request.body.password
   });
   await user.save();
+  console.log(user)
   response.send("Account registred successfully");
 });
 
 // get user express route
 app.get(`/getUser/:username`, async (request, response) => {
   const user = await UserModel.find({username: request.params.username});
-  response.send({user});
+  response.send(user[0]);
 });
 
 // store message express route
@@ -82,7 +86,9 @@ app.post(`/storeMessage`, async (request, response) => {
     lastEdited: request.body.lastEdited
   });
   await msg.save();
-  response.send("Message saved successfully");
+  console.log(msg)
+  // send it to get updated on clients
+  response.send(msg);
 });
 
 // retreive msg express route

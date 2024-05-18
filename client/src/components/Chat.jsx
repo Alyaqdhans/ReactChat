@@ -11,21 +11,8 @@ function Chat({isLogged, socket, userCount}) {
   let [messageList, setMessageList] = useState([])
 
   const date = moment.tz(new Date(Date.now()), "Asia/Muscat")
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (!message) return
-
-    const messageData = {
-      username: isLogged,
-      text: message,
-      date: date.format('D/M/Y h:m A'),
-      edited: false,
-      lastEdited: date.format('D/M/Y h:m A')
-    }
-
-    // live send to clients
-    await socket.emit("send_message", messageData)
-    setMessageList((list) => [...list, messageData])
-    setMessage("")
 
     // store message in database
     Axios.post(`http://localhost:4000/storeMessage`, {
@@ -36,24 +23,25 @@ function Chat({isLogged, socket, userCount}) {
       lastEdited: date.format('D/M/Y h:m A')
     })
     .then((response) => {
-      console.log(response.data)
+      console.log("Message saved successfully")
+      // live send to clients with the new _id
+      socket.emit("send_message", response.data)
+      setMessage("")
     })
     .catch((error) => {
       console.log(error)
     })
   }
 
-  const deleteMessage = async (_id) => {
+  const deleteMessage = (_id) => {
     if (!window.confirm("Are you sure you want to delete?")) return
-
-    // live delete from clients
-    await socket.emit("delete_message", _id)
-    setMessageList((list) => [...list.filter((msg) => {return msg._id !== _id})])
 
     // delete message from database
     Axios.delete(`http://localhost:4000/deleteMessage/${_id}`)
     .then((response) => {
       console.log(response.data)
+      // live delete from clients
+      socket.emit("delete_message", _id)
     })
     .catch((error) => {
       console.log(error)
@@ -69,17 +57,7 @@ function Chat({isLogged, socket, userCount}) {
     setEditMsg(msg)
   }
 
-  const saveEditMessage = async () => {
-    // live edit from clients
-    await socket.emit("edit_message", editMsg._id)
-    messageList.filter((msg) => {
-      if (msg._id === editMsg._id) {
-        msg.edited = true
-        msg.text = message
-        msg.lastEdited = date.format('D/M/Y h:m A')
-      }
-    })
-
+  const saveEditMessage = () => {
     // edit message from database
     Axios.put(`http://localhost:4000/editMessage/${editMsg._id}`, {
       text: message,
@@ -88,6 +66,16 @@ function Chat({isLogged, socket, userCount}) {
     })
     .then((response) => {
       console.log(response.data)
+      // alter the edited message
+      messageList.filter((msg) => {
+        if (msg._id === editMsg._id) {
+          msg.edited = true
+          msg.text = message
+          msg.lastEdited = date.format('D/M/Y h:m A')
+        }
+      })
+      // live edit from clients
+      socket.emit("edit_message", messageList)
     })
     .catch((error) => {
       console.log(error);
@@ -99,28 +87,20 @@ function Chat({isLogged, socket, userCount}) {
     setEditMsg(null)
   }
 
-  useEffect(() => {
-    // live refresh messages
-    socket.off("sending_message").on("sending_message", (msg) => {
-      setMessageList((list) => [...list, msg])
-    })
+  // live refresh messages
+  socket.off("sending_message").on("sending_message", (msg) => {
+    setMessageList((list) => [...list, msg])
+  })
 
-    // live remove deleted message
-    socket.off("deleting_message").on("deleting_message", (_id) => {
-      setMessageList((list) => [...list.filter((msg) => {return msg._id !== _id})])
-    })
+  // live remove deleted message
+  socket.off("deleting_message").on("deleting_message", (_id) => {
+    setMessageList((list) => [...list.filter((msg) => {return msg._id !== _id})])
+  })
 
-    // live change edited message
-    socket.off("editing_message").on("editing_message", (_id) => {
-      messageList.filter((msg) => {
-        if (msg._id === _id) {
-          msg.edited = true
-          msg.text = message
-          msg.lastEdited = date.format('D/M/Y h:m A')
-        }
-      })
-    })
-  }, [socket])
+  // live change edited message
+  socket.off("editing_message").on("editing_message", (msgList) => {
+    setMessageList(msgList)
+  })
 
   useEffect(() => {
     // clear current list to avoid duplicates

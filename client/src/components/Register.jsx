@@ -27,7 +27,7 @@ function Register() {
     Axios.get(`http://localhost:4000/getUser/${user}`)
     .then((response) => {
       // check if user exists and not taken
-      if (response.data.user[0]) {
+      if (response.data) {
         setResponse("Username is taken")
         setColor("alert-danger")
       } else {

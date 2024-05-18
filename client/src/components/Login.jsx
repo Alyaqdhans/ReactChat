@@ -18,16 +18,17 @@ function Login(props) {
 
     Axios.get(`http://localhost:4000/getUser/${user}`)
     .then((response) => {
+      console.log(response.data)
       // check if username exists
-      if (!response.data.user[0])
+      if (!response.data)
         return setResponse("Username doesn't exist")
 
       // check if password is correct
-      if (response.data.user[0].password !== pass)
+      if (response.data.password !== pass)
         return setResponse("Incorrect password")
 
       // login the user
-      props.setIsLogged(response.data.user[0].username)
+      props.setIsLogged(response.data.username)
       navigate('/')
     })
     .catch((error) => {
