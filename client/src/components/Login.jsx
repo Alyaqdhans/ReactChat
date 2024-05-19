@@ -18,7 +18,6 @@ function Login(props) {
 
     Axios.get(`http://localhost:4000/getUser/${user}`)
     .then((response) => {
-      console.log(response.data)
       // check if username exists
       if (!response.data)
         return setResponse("Username doesn't exist")
