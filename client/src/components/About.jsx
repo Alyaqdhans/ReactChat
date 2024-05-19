@@ -2,7 +2,7 @@ import React from 'react'
 
 function About() {
   return (
-    <section id='about' className='p-3 rounded' style={{background: "white"}}>
+    <section id='about' className='p-3' style={{background: "white"}}>
       <h1>Project made by</h1>
       <ul>
         <h4><li>Alyaqdhan Zahran Alazri <span><a href="mailto:26s2025@utas.edu.om">(26s2025)</a></span></li></h4>

@@ -8,6 +8,15 @@ function Chat({isLogged, socket, chatCount}) {
     return <Alert text='Login before acccessing the chat!' color='alert-warning' />
 
   const [message, setMessage] = useState("")
+  const [currentChars, setCurrentChars] = useState(0)
+  const maxChars = 100
+  const handleMessage = (e) => {
+    if (e.target.value.length > maxChars) return
+
+    setCurrentChars(e.target.value.length)
+    setMessage(e.target.value)
+  }
+
   let [messageList, setMessageList] = useState([])
 
   const date = moment.tz(new Date(Date.now()), "Asia/Muscat")
@@ -170,7 +179,8 @@ function Chat({isLogged, socket, chatCount}) {
           <div id='bottom' ref={bottom}><input onClick={handleAutoScroll} type='button' className={'btn ' + (autoScroll ? 'btn-success' : 'btn-danger')} /></div>
       </div>
       <div className="chat-footer d-flex">
-        <input onChange={(e) => setMessage(e.target.value)} className='form-control me-2' type='text' value={message} placeholder='message' />
+        <input onChange={(e) => handleMessage(e)} className='form-control me-2 mb-1 pb-3 ' type='text' value={message} placeholder='message' />
+        <p>{currentChars}/{maxChars}</p>
         {
           (edit) ? (
             <>
