@@ -13,8 +13,8 @@ function Chat({isLogged, socket, chatCount}) {
   const handleMessage = (e) => {
     if (e.target.value.length > maxChars) return
 
-    setCurrentChars(e.target.value.length)
     setMessage(e.target.value)
+    setCurrentChars(e.target.value.length)
   }
 
   let [messageList, setMessageList] = useState([])
@@ -36,6 +36,7 @@ function Chat({isLogged, socket, chatCount}) {
       // live send to clients with the new _id
       socket.emit("send_message", response.data)
       setMessage("")
+      setCurrentChars(0)
     })
     .catch((error) => {
       console.log(error)
@@ -63,6 +64,7 @@ function Chat({isLogged, socket, chatCount}) {
   const editMode = (msg) => {
     setEdit(true)
     setMessage(msg.text)
+    setCurrentChars(msg.text.length)
     setEditMsg(msg)
   }
 
@@ -70,6 +72,7 @@ function Chat({isLogged, socket, chatCount}) {
   const restoreEditMode = () => {
     setEdit(false)
     setMessage("")
+    setCurrentChars(0)
     setEditMsg(null)
   }
 
@@ -179,7 +182,7 @@ function Chat({isLogged, socket, chatCount}) {
           <div id='bottom' ref={bottom}><input onClick={handleAutoScroll} type='button' className={'btn ' + (autoScroll ? 'btn-success' : 'btn-danger')} /></div>
       </div>
       <div className="chat-footer d-flex">
-        <input onChange={(e) => handleMessage(e)} className='form-control me-2 mb-1 pb-3 ' type='text' value={message} placeholder='message' />
+        <input onChange={(e) => handleMessage(e)} className='form-control me-2 mb-1 pb-3' style={{fontWeight: "bold"}} type='text' value={message} placeholder='message' />
         <p>{currentChars}/{maxChars}</p>
         {
           (edit) ? (

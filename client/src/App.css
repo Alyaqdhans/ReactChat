@@ -192,10 +192,11 @@ nav div {
 
 .chat-footer p {
   position: absolute;
-  right: 78px;
+  left: 6px;
   bottom: 5px;
-  opacity: .8;
+  opacity: .7;
   font-size: 12px;
+  pointer-events: none;
 }
 
 .chat-body #bottom input {
