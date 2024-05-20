@@ -19,24 +19,26 @@ function Chat({isLogged, socket, chatCount}) {
 
   let [messageList, setMessageList] = useState([])
 
-  const date = moment.tz(new Date(Date.now()), "Asia/Muscat")
+  const date = moment.tz(new Date(Date.now()), "Asia/Muscat").format('D/M/Y h:mm A')
   const sendMessage = () => {
     if (!message || !message.trim()) return
+
+    // delete input data
+    setMessage("")
+    setCurrentChars(0)
 
     // store message in database
     Axios.post(`http://localhost:4000/storeMessage`, {
       username: isLogged,
       text: message,
-      date: date.format('D/M/Y h:m A'),
+      date: date,
       edited: false,
-      lastEdited: date.format('D/M/Y h:m A')
+      lastEdited: date
     })
     .then((response) => {
       console.log("Message saved successfully")
       // live send to clients with the new _id
       socket.emit("send_message", response.data)
-      setMessage("")
-      setCurrentChars(0)
     })
     .catch((error) => {
       console.log(error)
@@ -79,11 +81,14 @@ function Chat({isLogged, socket, chatCount}) {
   const editMessage = () => {
     if (!message || !message.trim()) return
 
+    // delete input data
+    restoreEditMode()
+
     // edit message from database
     Axios.put(`http://localhost:4000/editMessage/${editMsg._id}`, {
       text: message,
       edited: true,
-      lastEdited: date.format('D/M/Y h:m A')
+      lastEdited: date
     })
     .then((response) => {
       console.log(response.data)
@@ -92,7 +97,7 @@ function Chat({isLogged, socket, chatCount}) {
         if (msg._id === editMsg._id) {
           msg.edited = true
           msg.text = message
-          msg.lastEdited = date.format('D/M/Y h:m A')
+          msg.lastEdited = date
         }
       })
       // live edit from clients
@@ -101,8 +106,6 @@ function Chat({isLogged, socket, chatCount}) {
     .catch((error) => {
       console.log(error);
     })
-
-    restoreEditMode()
   }
 
   // live add the new message
@@ -125,7 +128,7 @@ function Chat({isLogged, socket, chatCount}) {
     setMessageList([])
 
     // get previous messages from database
-    Axios.get(`http://localhost:4000/retreiveMessages`)
+    Axios.get(`http://localhost:4000/retrieveMessages`)
     .then((response) => {
       response.data.msgs.map((msg) => {
         setMessageList((list) => [...list, msg])

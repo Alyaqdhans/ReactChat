@@ -107,7 +107,7 @@ app.post(`/storeMessage`, async (request, response) => {
 });
 
 // retreive msg express route
-app.get(`/retreiveMessages`, async (request, response) => {
+app.get(`/retrieveMessages`, async (request, response) => {
   const msgs = await MessageModel.find();
   response.send({msgs});
 });
