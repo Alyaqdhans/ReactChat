@@ -7,6 +7,7 @@ function About() {
       <ul>
         <h4><li>Alyaqdhan Zahran Alazri <span><a href="mailto:26s2025@utas.edu.om">(26s2025)</a></span></li></h4>
         <h4><li>Omar Aamir Alsulaimi <span><a href="mailto:26s1930@utas.edu.om">(26s1930)</a></span></li></h4>
+        <h4><li>Abdulrahman Salim Alriyami <span><a href="mailto:76s1937@utas.edu.om">(76s1937)</a></span></li></h4>
       </ul>
       <h1>References</h1>
       <ul>

@@ -168,7 +168,7 @@ function Chat({isLogged, socket, chatCount}) {
                   <div>
                     <p id='author'>{msg.username}</p>
                     <div className="message-content">
-                      <p>{msg.text}</p>
+                      <p className={msg.text.length === 2 ? 'h2 pb-1' : ''}>{msg.text}</p>
                     </div>
                     <div id='modify' className='d-flex'>
                       <input className={'btn btn-danger ms-1 ' + (isLogged !== msg.username ? "d-none" : "")} onClick={() => deleteMessage(msg._id)} type="button" value='delete' />
