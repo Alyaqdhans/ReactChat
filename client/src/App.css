@@ -149,7 +149,7 @@ nav div {
 
 /* control messages to be left or right */
 #you {
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 #other {
   justify-content: flex-start;
