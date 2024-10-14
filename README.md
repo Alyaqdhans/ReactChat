@@ -2,7 +2,8 @@
 terminal 1. `cd client` -> `npm start`<br>
 terminal 2. `cd server` -> `npm start`<br>
 
-![image](https://github.com/Alyaqdhans/ReactChat/assets/58079015/1a415460-ad52-4777-835a-e0c0b77e3e53)
+![image](https://github.com/user-attachments/assets/cae393b2-8593-481f-9ce8-338de2cc9a8f)
+
 
 <hr>
 
