@@ -1,6 +1,14 @@
-**Important:** to run both the server and client you need to open two terminals and use (npm start)<br>
-terminal 1. `cd client` -> `npm start`<br>
-terminal 2. `cd server` -> `npm start`<br>
+**Important:** to run both the server and client you need to open two terminals and do the following:<br>
+
+> terminal 1:
+> 1. `cd client`
+> 2. `npm install`
+> 3. `npm start`
+
+> terminal 2:
+> 1. `cd server`
+> 2. `npm install`
+> 3. `npm start`
 
 ![image](https://github.com/user-attachments/assets/cae393b2-8593-481f-9ce8-338de2cc9a8f)
 
